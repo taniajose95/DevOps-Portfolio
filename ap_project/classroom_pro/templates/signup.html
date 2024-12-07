@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup - ClassRoomPro</title>
+    <style>
+
+        {% load static %}
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('{% static 'classroom_pro/images/background.jpg' %}');
+            background-size: cover;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Add a semi-transparent layer */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.5); /* Adjust the opacity as needed */
+            z-index: -1; /* Ensure it's behind other content */
+        }
+
+        header {
+            background-color: white;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        header img {
+            width: 50px; /* Adjust the size of the logo as needed */
+            margin-right: 10px;
+        }
+
+        header h1 {
+            font-size: 24px; /* Adjust the font size of the title as needed */
+        }
+
+        .login-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        form input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+
+        form button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .options a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .options a:hover {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% load static %}
+        <img src="{% static 'classroom_pro/images/ClassRoom-Pro.png' %}" alt="ClassRoomPro Logo">
+        <h1>ClassRoomPro</h1>
+    </header>
+    <div class="login-container">
+        <form method="post" action="{% url 'signup' %}">
+            {% csrf_token %}
+            <h2>Signup</h2>
+            <input type="text" name="name" placeholder="Name" required><br>
+            <input type="email" name="email" placeholder="Email" required><br>
+            <input type="text" name="role" placeholder="Role" required><br>
+            <input type="text" name="department" placeholder="Department"><br>
+            <input type="password" name="password1" placeholder="Password" required><br>
+            <input type="password" name="password2" placeholder="Confirm Password" required><br>
+            <button type="submit">Signup</button>
+        </form>
+        <div class="options">
+            <p>Already have an account? <a href="{% url 'user_login' %}">Login</a></p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Booking - ClassRoomPro</title>
+    <style>
+        {% load static %}
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),url('{% static 'classroom_pro/images/background3.png' %}');
+            background-size: 1300px 600px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #333; /* Text color */
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 1);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between; /* Align items in header */
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000; /* Ensure header is above other content */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        header img {
+            width: 50px; /* Adjust the size of the logo as needed */
+            margin-right: 10px;
+        }
+
+        header h1 {
+            font-size: 24px; /* Adjust the font size of the title as needed */
+        }
+
+        .logout-link {
+            margin-left: auto; /* Push the logout link to the right */
+        }
+
+        h2 {
+            margin-top: 30px;
+            padding: 70px;
+            text-align: center;
+            font-size: 28px;
+            color: #333;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0px;
+            margin: 0 auto; /* Centers the list */
+            max-width: 800px; /* Limits the width of the list */
+        }
+
+        li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #fff; /* White background for list items */
+        }
+
+        li a {
+            margin-left: 10px;
+            text-decoration: none;
+            color: blue;
+            display: inline-block;
+        }
+
+        /* Additional content and styling */
+        .additional-content {
+            padding: 10px;
+            background-color: #fff; /* White background color for additional content */
+            margin: 20px auto; /* Centers the content */
+            max-width: 800px; /* Limits the width of the content */
+            text-align: center; /* Centers the text */
+            color: #333; /* Text color */
+        }
+
+        /* Trademark styling */
+        .trademark {
+            color: blue; /* Blue color for the trademark */
+            font-size: 14px; /* Adjust the font size as needed */
+            margin-top: 20px; /* Add space above the trademark */
+            text-align: center; /* Centers the trademark */
+        }
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .manage-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .manage-btn:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% load static %}
+        <img src="{% static 'classroom_pro/images/ClassRoom-Pro.png' %}" alt="ClassRoomPro Logo">
+        <h1>ClassRoomPro</h1>
+        <div class="logout-link">
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </header>
+    <h2>Manage Booking</h2>
+    <ul>
+        {% for booking in bookings %}
+        <li>{{ booking.Date }} - Time Slot: {{ booking.TimeSlot }} | Status: {{ booking.Status }} | Comments: {{ booking.Comments}}
+            {% if booking.Status == 'Pending' %}
+                <a href="{% url 'cancel_booking' booking.BookingID %}">Cancel</a>
+                <a href="{% url 'modify_booking' booking.BookingID %}" style="color: red;">Modify</a> <!-- Adjusted style for the link -->
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+    <div class="btn-container">
+        <button class="manage-btn" onclick="window.location.href='{% url 'index' %}'">Go Back to Home</button>
+    </div>
+    <!-- Additional content to fill empty space -->
+    <div class="additional-content">
+        <h3>Important</h3>
+        <p>Students Please Note that modifying time requires approval from the Admin again.</p>
+    </div>
+
+    <!-- Trademark -->
+    <footer>
+        <p>&copy; 2024 ClassRoomPro. All rights reserved.</p>
+    </footer>
+</body>
+</html>

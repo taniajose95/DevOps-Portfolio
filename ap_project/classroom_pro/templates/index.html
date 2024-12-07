@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - ClassRoomPro</title>
+    <style>
+        {% load static %}
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('{% static 'classroom_pro/images/background1.png' %}');
+            background-size: 1300px 600px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #333; /* Text color */
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 1);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between; /* Align items at each end of the header */
+            align-items: center; /* Vertically center items */
+        }
+
+        header img {
+            width: 50px; /* Adjust the size of the logo as needed */
+            margin-right: 10px;
+        }
+
+        header h1 {
+            font-size: 24px; /* Adjust the font size of the title as needed */
+            margin: 0; /* Remove margin for the title */
+        }
+
+        .logout-link {
+            /* Move the logout link to the top right */
+            margin-left: auto; /* Push the logout link to the right */
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 28px;
+            margin-top: 50px; /* Adjust the margin top as needed */
+        }
+
+        .content {
+            text-align: center;
+            margin-top: 20px; /* Adjust the margin top as needed */
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .additional-info {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+            color: #333;
+        }
+
+        footer {
+            background-color: #333; /* Background color for the footer */
+            color: white; /* Text color for the footer */
+            text-align: center;
+            padding: 20px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        main {
+            padding-top: 150px; /* Adjust this value based on the header height */
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% load static %}
+        <img src="{% static 'classroom_pro/images/ClassRoom-Pro.png' %}" alt="ClassRoomPro Logo">
+        <h1>ClassRoomPro</h1>
+        <div class="logout-link">
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </header>
+    <main>
+        <h2>Welcome, {{ request.user.Name }}!</h2>
+        <div class="additional-info">
+            <p>Thank you for using ClassRoomPro. Feel free to navigate and make the most out of your experience!</p>
+        </div>
+        <div class="content">
+            {% if request.user.Role.lower == 'admin' %}
+                <a href="{% url 'approval_page' %}"><button>Manage Approvals</button></a>
+            {% endif %}
+            <a href="{% url 'room_list' %}"><button>View Rooms</button></a>
+            <a href="{% url 'manage_booking' %}"><button>Manage Booking</button></a>
+        </div>
+        <div class="notifications">
+            {% if notification %}
+                <div class="alert">{{ notification }}</div>
+            {% endif %}
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2024 ClassRoomPro. All rights reserved.</p>
+    </footer>
+</body>
+</html>

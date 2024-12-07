@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Booking - ClassRoomPro</title>
+    <style>
+        {% load static %}
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('{% static 'classroom_pro/images/background3.png' %}');
+            background-size: 1300px 600px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #333; /* Text color */
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 1);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between; /* Align items at each end of the header */
+            align-items: center; /* Vertically center items */
+        }
+
+        header img {
+            width: 50px; /* Adjust the size of the logo as needed */
+            margin-right: 10px;
+        }
+
+        header h1 {
+            font-size: 24px; /* Adjust the font size of the title as needed */
+        }
+
+        .logout-link {
+            margin-left: auto; /* Push the logout link to the right */
+        }
+
+        h2 {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 28px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        td a {
+            text-decoration: none;
+            color: blue;
+        }
+
+        td a:hover {
+            color: darkblue;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .manage-btn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .manage-btn:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% load static %}
+        <img src="{% static 'classroom_pro/images/ClassRoom-Pro.png' %}" alt="ClassRoomPro Logo">
+        <h1>ClassRoomPro</h1>
+        <div class="logout-link">
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </header>
+    <h2>View ClassRooms, Labs and More!</h2>
+    <form method="GET" action="{% url 'room_list' %}">
+        <label for="room_name">Room Name:</label>
+        <input type="text" name="room_name" id="room_name">
+
+        <label for="capacity">Capacity:</label>
+        <input type="number" name="capacity" id="capacity">
+
+        <label for="location">Location:</label>
+        <input type="text" name="location" id="location">
+
+        <button type="submit">Filter</button>
+    </form>
+    <table>
+        <thead>
+            <tr>
+                <th>Room Name</th>
+                <th>Capacity</th>
+                <th>Location</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for room in rooms %}
+            <tr>
+                <td>{{ room.RoomName }}</td>
+                <td>{{ room.Capacity }}</td>
+                <td>{{ room.Location }}</td>
+                <td><a href="{% url 'book_room' room.RoomID %}">Book</a></td>
+            </tr>
+            {% endfor %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li style="color: red;">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </tbody>
+    </table>
+    <div class="btn-container">
+        <button class="manage-btn" onclick="window.location.href='{% url 'manage_booking' %}'">Manage Bookings</button>
+    </div>
+    <!-- Footer section -->
+    <footer>
+        <p>&copy; 2024 ClassRoomPro. All rights reserved.</p>
+    </footer>
+</body>
+</html>

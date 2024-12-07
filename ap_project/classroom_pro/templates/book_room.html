@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Room - ClassRoomPro</title>
+    <style>
+        {% load static %}
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),url('{% static 'classroom_pro/images/background3.png' %}');
+            background-size: 1300px 600px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #333; /* Text color */
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 1);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between; /* Align items in header */
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000; /* Ensure header is above other content */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        header img {
+            width: 50px; /* Adjust the size of the logo as needed */
+            margin-right: 10px;
+        }
+
+        header h1 {
+            font-size: 24px; /* Adjust the font size of the title as needed */
+        }
+
+        .logout-link {
+            margin-right: 10px; /* Adjust margin to create space */
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 400px;
+            margin: 0 auto;
+            margin-top: 100px; /* Increase margin-top for better visibility */
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 28px;
+            color: #333;
+        }
+
+        p {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        select[disabled] {
+            color: grey;
+        }
+
+        footer {
+            background-color: #333; /* Background color for the footer */
+            color: white; /* Text color for the footer */
+            text-align: center;
+            padding: 20px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% load static %}
+        <img src="{% static 'classroom_pro/images/ClassRoom-Pro.png' %}" alt="ClassRoomPro Logo">
+        <h1>ClassRoomPro</h1>
+        <div class="logout-link">
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </header>
+    <div class="container">
+        <h2>Book Room - {{ room.RoomName }}</h2>
+        <p>Room Name: {{ room.RoomName }}</p>
+        <p>Facilities: {{ room.Facilities }}</p>
+        <p>Capacity: {{ room.Capacity }}</p>
+        <p>Location: {{ room.Location }}</p>
+        <form method="post" action="{% url 'book_room' room.RoomID %}">
+            {% csrf_token %}
+            <!-- Date input -->
+            <label for="date">Select Date:</label>
+            <input type="date" id="date" name="date" required><br>
+            <!-- Time slot selection -->
+            <label for="time_slot">Select Time Slot:</label>
+            <select id="time_slot" name="time_slot" required>
+                {% for availability in room_availability %}
+                    {% if availability.AvailabilityStatus == 'available' %}
+                        <option value="{{ availability.TimeSlot }}">{{ availability.TimeSlot }}</option>
+                    {% else %}
+                        <option value="{{ availability.TimeSlot }}" disabled>{{ availability.TimeSlot }} (Booked)</option>
+                    {% endif %}
+                {% endfor %}
+            </select><br>
+            <!-- Submit butt=\on -->
+            <button type="submit">Book</button>
+        </form>
+    </div>
+    <footer>
+        <p>&copy; 2024 ClassRoomPro. All rights reserved.</p>
+    </footer>
+</body>
+</html>

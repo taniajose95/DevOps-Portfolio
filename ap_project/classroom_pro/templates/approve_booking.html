@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approval Result - ClassRoomPro</title>
+    <style>
+        {% load static %}
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)),url('{% static 'classroom_pro/images/background3.png' %}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #333; /* Text color */
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        header img {
+            width: 50px; /* Adjust the size of the logo as needed */
+            margin-right: 10px;
+        }
+
+        header h1 {
+            font-size: 24px; /* Adjust the font size of the title as needed */
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 28px;
+            margin-top: 50px; /* Adjust the margin top as needed */
+        }
+
+        .content {
+            text-align: center;
+            margin-top: 20px; /* Adjust the margin top as needed */
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .additional-info {
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            margin: 20px auto;
+            max-width: 800px;
+            text-align: center;
+            color: #333;
+        }
+
+        footer {
+            background-color: #333; /* Background color for the footer */
+            color: white; /* Text color for the footer */
+            text-align: center;
+            padding: 20px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        {% load static %}
+        <img src="{% static 'classroom_pro/images/ClassRoom-Pro.png' %}" alt="ClassRoomPro Logo">
+        <h1>ClassRoomPro</h1>
+    </header>
+    <h2>Approval Result</h2>
+    <div class="content">
+        {% if action == 'approve' %}
+            <p>Booking Approved Successfully!</p>
+        {% elif action == 'reject' %}
+            <p>Booking Rejected Successfully!</p>
+        {% endif %}
+        <a href="{% url 'approval_page' %}"><button>Back to Approval Page</button></a>
+    </div>
+    <footer>
+        <p>&copy; 2024 ClassRoomPro. All rights reserved.</p>
+    </footer>
+</body>
+</html>

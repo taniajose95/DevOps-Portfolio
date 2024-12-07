@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approve Bookings - ClassRoomPro</title>
+    <style>
+        {% load static %}
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url('{% static 'classroom_pro/images/background3.png' %}');
+            background-size: 1300px 600px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #333; /* Text color */
+            text-align: center; /* Center-align text */
+        }
+
+        header {
+            background-color: rgba(255, 255, 255, 1);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between; /* Align items in header */
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000; /* Ensure header is above other content */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        header img {
+            width: 50px; /* Adjust the size of the logo as needed */
+            margin-right: 10px;
+        }
+
+        header h1 {
+            font-size: 24px; /* Adjust the font size of the title as needed */
+        }
+
+        .logout-link {
+            margin-right: 10px; /* Adjust margin to create space */
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #333;
+            margin-top: 20px; /* Add space above the heading */
+        }
+
+        table {
+            width: 80%; /* Adjust table width as needed */
+            margin: 20px auto; /* Center-align table */
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+
+        td a {
+            text-decoration: none;
+            color: blue;
+        }
+
+        td a:hover {
+            color: darkblue;
+        }
+
+        /* Narrower Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .action-buttons button {
+            padding: 8px 12px;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .approve {
+            background-color: #4CAF50;
+        }
+
+        .reject {
+            background-color: #f44336;
+        }
+
+        /* Style the text input for comments */
+        .input-comments {
+            width: 80%;
+            padding: 5px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{% static 'classroom_pro/images/ClassRoom-Pro.png' %}" alt="ClassRoomPro Logo">
+        <h1>ClassRoomPro</h1>
+        <div class="logout-link">
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </header>
+    <h2>Approve Bookings</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Booking ID</th>
+                <th>User Name</th>
+                <th>Room Name</th>
+                <th>Time Slot</th>
+                <th>Status</th>
+                <th>Comments</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.booking_id }}</td>
+                <td>{{ booking.user_name }}</td>
+                <td>{{ booking.room_name }}</td>
+                <td>{{ booking.time_slot }}</td>
+                <td>{{ booking.status }}</td>
+                <td>
+                    <!-- Text input field for comments -->
+                    <input type="text" class="input-comments" id="comments_{{ booking.booking_id }}" placeholder="Enter comments" required>
+                </td>
+                <td class="action-buttons">
+                    {% if booking.status == 'Pending' %}
+                        <form id="form_{{ booking.booking_id }}" method="post" action="{% url 'approve_booking' %}">
+                            {% csrf_token %}
+                            <!-- Hidden input field to capture the booking ID and status -->
+                            <input type="hidden" name="booking_id" value="{{ booking.booking_id }}">
+                            <input type="hidden" name="status" value="{{ booking.status }}">
+                            <button type="button" onclick="submitAction('{{ booking.booking_id }}', 'approve')" class="approve">Approve</button>
+                            <button type="button" onclick="submitAction('{{ booking.booking_id }}', 'reject')" class="reject">Reject</button>
+                        </form>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'index' %}">Go back to Home</a>
+    <!-- Footer section -->
+    <footer>
+        <p>&copy; 2024 ClassRoomPro. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function submitAction(bookingId, action) {
+            const commentsInput = document.getElementById('comments_' + bookingId);
+            const form = document.getElementById('form_' + bookingId);
+
+            // Set the form action and method
+            form.action = '{% url "approve_booking" %}';
+            form.method = 'POST';
+
+            // Create hidden input for comments and append to the form
+            const commentsHiddenInput = document.createElement('input');
+            commentsHiddenInput.type = 'hidden';
+            commentsHiddenInput.name = 'comments';
+            commentsHiddenInput.value = commentsInput.value;
+            form.appendChild(commentsHiddenInput);
+
+            // Create hidden input for action (approve or reject) and append to the form
+            const actionHiddenInput = document.createElement('input');
+            actionHiddenInput.type = 'hidden';
+            actionHiddenInput.name = 'action';
+            actionHiddenInput.value = action;
+            form.appendChild(actionHiddenInput);
+
+            // Submit the form
+            form.submit();
+        }
+    </script>
+</body>
+</html>
